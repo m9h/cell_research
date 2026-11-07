@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -33,9 +34,9 @@ def plot_raw_data(file):
         plt.plot(x, monotonicities, c=random_pick_color())
     plt.show()
 
-plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p0_steps_for_50_exp.npy')
-plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p25_steps_for_50_exp.npy')
-plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p50_steps_for_50_exp.npy')
-plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p75_steps_for_50_exp.npy')
+plot_raw_data(f'{DATA_DIR}/bubble_sort_p0_steps_for_50_exp.npy')
+plot_raw_data(f'{DATA_DIR}/bubble_sort_p25_steps_for_50_exp.npy')
+plot_raw_data(f'{DATA_DIR}/bubble_sort_p50_steps_for_50_exp.npy')
+plot_raw_data(f'{DATA_DIR}/bubble_sort_p75_steps_for_50_exp.npy')
 
 

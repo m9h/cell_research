@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 import numpy as np
 from utils import get_monotonicity
 import scipy.stats as stats
@@ -28,10 +29,10 @@ def get_original_exp_monotonicities(file):
     return [exp_record for exp_record in experiments]
 
 def get_original_algo_sorting_file_path(algo, frozen_cells):
-    return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_{algo}_sort_with_{frozen_cells}frozen_cannot_move_sorting_steps_100exps.npy"
+    return f"{DATA_DIR}/original_{algo}_sort_with_{frozen_cells}frozen_cannot_move_sorting_steps_100exps.npy"
 
 def get_cell_algo_sorting_file_path(algo, frozen_cells):
-    return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algo}_sort_sorting_with_{frozen_cells}frozen_cannot_move_steps_100exps.npy"
+    return f"{DATA_DIR}/{algo}_sort_sorting_with_{frozen_cells}frozen_cannot_move_steps_100exps.npy"
 
 
 def compare_algorithms(algo, frozen_cells):

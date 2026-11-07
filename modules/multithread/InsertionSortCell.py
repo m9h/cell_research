@@ -6,7 +6,7 @@ from .CellGroup import GroupStatus
 import random
 
 class InsertionSortCell(MultiThreadCell):
-    def __init__(self, threadID, value, lock, current_position, cells, left_boundary, right_boundary, status_probe, disable_visualization=False, swapping_count=[0], export_steps=[], label=0, reverse_direction=False):
+    def __init__(self, threadID, value, lock, current_position, cells, left_boundary, right_boundary, status_probe, disable_visualization=False, swapping_count=None, export_steps=None, label=0, reverse_direction=False):
         super().__init__(threadID, value, lock, current_position, cells, left_boundary, right_boundary, status_probe, disable_visualization=disable_visualization, swapping_count=swapping_count, export_steps=export_steps, reverse_direction=reverse_direction)
         self.cell_vision = 1
         self.cell_type = 'Insertion'
@@ -22,19 +22,11 @@ class InsertionSortCell(MultiThreadCell):
         return True
 
     def should_move(self):
-        if self.reverse_direction:
-            bigger_than_left = False
-            if self.current_position[0] > self.left_boundary[0]:
-                bigger_than_left = self.value > self.cells[int(self.current_position[0] - 1)].value and self.cells[int(self.current_position[0] - 1)].status ==  CellStatus.ACTIVE 
-            
-            return self.is_enable_to_move() and bigger_than_left
-            #return bigger_than_left
-        
-        smaller_than_left = False
-        if self.current_position[0] > self.left_boundary[0]:
-            smaller_than_left = self.value < self.cells[int(self.current_position[0] - 1)].value and self.cells[int(self.current_position[0] - 1)].status ==  CellStatus.ACTIVE 
-            
-        return self.is_enable_to_move() and smaller_than_left
+        if self.current_position[0] <= self.left_boundary[0]:
+            return False
+        neighbor = self.cells[self.current_position[0] - 1]
+        out_of_order = self.value > neighbor.value if self.reverse_direction else self.value < neighbor.value
+        return self.can_swap_with(neighbor) and self.is_enable_to_move() and out_of_order
         #return smaller_than_left
 
     def should_move_to(self, target_position):
@@ -51,7 +43,7 @@ class InsertionSortCell(MultiThreadCell):
 
             # if self.cells[int(target_position[0])].status == CellStatus.FREEZE:
             #     print("xxxxxxxxxxxxxxx2")
-            err_happen = random.random() < 0
+            err_happen = self.rng.random() < 0
             if err_happen:
                 return not self.value > self.cells[int(target_position[0])].value 
             # if self.cells[int(target_position[0])].status == CellStatus.FREEZE:
@@ -66,37 +58,27 @@ class InsertionSortCell(MultiThreadCell):
         #         print(self.status)
         
     def is_enable_to_move(self):
-        if self.reverse_direction:
-            prev = 100000
-        else:
-            prev = -1
-        for i in range(int(self.left_boundary[0]), int(self.current_position[0])):
+        prev = float("inf") if self.reverse_direction else float("-inf")
+        for i in range(self.left_boundary[0], self.current_position[0]):
             if self.cells[i].status == CellStatus.FREEZE:
-                prev = -1
+                # Preserve upstream's explicit prefix reset at a frozen cell.
+                prev = float("inf") if self.reverse_direction else float("-inf")
                 continue
-            if self.reverse_direction and self.cells[i].value > prev:
+            value = self.cells[i].value
+            if (self.reverse_direction and value > prev) or (not self.reverse_direction and value < prev):
                 return False
-            
-            if not self.reverse_direction and self.cells[i].value < prev:
-                return False
-            prev = self.cells[i].value
+            prev = value
         return True
     
     def move(self):
-        self.lock.acquire()
-        if not self.is_enable_to_move():
-            self.lock.release()
-            return
-        
-        if self.should_move():
-            self.status_probe.record_compare_and_swap()
-        
-        if self.group.status == GroupStatus.SLEEP and self.status != CellStatus.MOVING:
-            self.status = CellStatus.SLEEP
-        target_position = (self.current_position[0] - self.cell_vision, self.current_position[1])
-        # if self.status == CellStatus.FREEZE:
-        #         print("xxxxxxxxxxxxxxx4")
-        if self.should_move_to(target_position):
-            self.swap(target_position)
-        self.lock.release()
+        with self.lock:
+            if not self.is_enable_to_move():
+                return
+            if self.should_move():
+                self.status_probe.record_compare_and_swap()
+            if self.group.status == GroupStatus.SLEEP and self.status != CellStatus.MOVING:
+                self.status = CellStatus.SLEEP
+            target = (self.current_position[0] - self.cell_vision, self.current_position[1])
+            if self.should_move_to(target):
+                self.swap(target)
 

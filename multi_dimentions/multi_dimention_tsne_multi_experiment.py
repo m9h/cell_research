@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 from sklearn.manifold import TSNE
 from keras.datasets import mnist
 from sklearn.datasets import load_iris
@@ -39,7 +40,7 @@ for i in range(20):
 
 
 #x = np.array(moves)
-loaded_data = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_steps_for_50_exps.txt.npy', allow_pickle=True,)
+loaded_data = np.load(f'{DATA_DIR}/bubble_sort_steps_for_50_exps.txt.npy', allow_pickle=True,)
 for idx in range(len(loaded_data)):
 
     data = loaded_data[idx]

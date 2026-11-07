@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -17,7 +18,7 @@ def get_current_monotonicity(arr):
 f, ax = plt.subplots(1, figsize = (8, 4))
 plt.xlabel('time')
 plt.ylabel('monocity')
-moves = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_steps_for_1_exp.npy')[0]
+moves = np.load(f'{DATA_DIR}/bubble_sort_steps_for_1_exp.npy')[0]
 monotonicities = [get_current_monotonicity(arr) for  arr in moves]
 x = [n for n in range(1, len(monotonicities) +1)]
 ax.plot(x, monotonicities)
@@ -95,16 +96,16 @@ plt.show()
 
 
 
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p0_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p25_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p50_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p75_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p0_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p25_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p50_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p75_steps_for_50_exp.npy')
 
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p0_steps_for_50_exp.npy', 0)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p25_steps_for_50_exp.npy', 25)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p50_steps_for_50_exp.npy', 50)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p75_steps_for_50_exp.npy', 75)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_steps_for_50_exps.txt.npy', 100)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p0_steps_for_50_exp.npy', 0)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p25_steps_for_50_exp.npy', 25)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p50_steps_for_50_exp.npy', 50)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p75_steps_for_50_exp.npy', 75)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_steps_for_50_exps.txt.npy', 100)
 
 
 

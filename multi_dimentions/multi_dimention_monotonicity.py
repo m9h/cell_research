@@ -1,3 +1,5 @@
+from cell_research.paths import FIGURE_DIR
+from cell_research.paths import DATA_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -29,14 +31,14 @@ def get_sorting_steps(file):
     return np.load(file, allow_pickle=True,)
 
 def cell_original_efficiency_compare_include_read():
-    cell_bubble_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_total_steps_100exps.npy') 
-    original_bubble_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_bubble_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    cell_bubble_steps = get_sorting_steps(f'{DATA_DIR}/bubble_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    original_bubble_steps = get_sorting_steps(f'{DATA_DIR}/original_bubble_sort_sorting_with_0frozen_total_steps_100exps.npy')
     
-    cell_insertion_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/insertion_sort_sorting_with_0frozen_total_steps_100exps.npy') 
-    original_insertion_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_insertion_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    cell_insertion_steps = get_sorting_steps(f'{DATA_DIR}/insertion_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    original_insertion_steps = get_sorting_steps(f'{DATA_DIR}/original_insertion_sort_sorting_with_0frozen_total_steps_100exps.npy')
     
-    cell_selection_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_sorting_with_0frozen_total_steps_100exps.npy') 
-    original_selection_steps = get_sorting_steps('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_selection_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    cell_selection_steps = get_sorting_steps(f'{DATA_DIR}/selection_sort_sorting_with_0frozen_total_steps_100exps.npy')
+    original_selection_steps = get_sorting_steps(f'{DATA_DIR}/original_selection_sort_sorting_with_0frozen_total_steps_100exps.npy')
     ztest_bubble = ztest(cell_bubble_steps, original_bubble_steps)
     ztest_insertion =  ztest(cell_insertion_steps, original_insertion_steps)
     ztest_selection = ztest(cell_selection_steps, original_selection_steps)
@@ -76,7 +78,7 @@ def cell_original_efficiency_compare_include_read():
     plt.title(f'Cell and Traditional Efficiency Comparison')
     
     plt.legend()
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+    # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
     # plt.show()
 def get_sorting_steps_for_aggregation(file_path):
     steps = []
@@ -87,12 +89,12 @@ def get_sorting_steps_for_aggregation(file_path):
     return steps
 
 def cell_efficiency_mix_compare():
-    cell_bubble_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')     
-    cell_insertion_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/insertion_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')     
-    cell_selection_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy') 
-    cell_bubble_selection_steps = get_sorting_steps_for_aggregation("/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests")
-    cell_bubble_insertion_steps = get_sorting_steps_for_aggregation("/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests_bubble_insertion")
-    cell_insertion_selection_steps = get_sorting_steps_for_aggregation("/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests_selection_insertion")
+    cell_bubble_steps = get_sorting_steps_arr(f'{DATA_DIR}/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    cell_insertion_steps = get_sorting_steps_arr(f'{DATA_DIR}/insertion_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    cell_selection_steps = get_sorting_steps_arr(f'{DATA_DIR}/selection_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    cell_bubble_selection_steps = get_sorting_steps_for_aggregation(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests")
+    cell_bubble_insertion_steps = get_sorting_steps_for_aggregation(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests_bubble_insertion")
+    cell_insertion_selection_steps = get_sorting_steps_for_aggregation(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests_selection_insertion")
     cell = [np.average(cell_bubble_steps), np.average(cell_insertion_steps), np.average(cell_selection_steps), np.average(cell_bubble_selection_steps), np.average(cell_bubble_insertion_steps), np.average(cell_insertion_selection_steps)]
     cell_std = [np.std(cell_bubble_steps), np.std(cell_insertion_steps), np.std(cell_selection_steps), np.std(cell_bubble_selection_steps), np.std(cell_bubble_insertion_steps), np.std(cell_insertion_selection_steps)]
     barWidth = 0.25
@@ -117,14 +119,14 @@ def cell_efficiency_mix_compare():
     
 
 def cell_original_efficiency_compare():
-    cell_bubble_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy') 
-    original_bubble_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
+    cell_bubble_steps = get_sorting_steps_arr(f'{DATA_DIR}/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    original_bubble_steps = get_sorting_steps_arr(f'{DATA_DIR}/original_bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
     
-    cell_insertion_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/insertion_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy') 
-    original_insertion_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_insertion_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
+    cell_insertion_steps = get_sorting_steps_arr(f'{DATA_DIR}/insertion_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    original_insertion_steps = get_sorting_steps_arr(f'{DATA_DIR}/original_insertion_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
     
-    cell_selection_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy') 
-    original_selection_steps = get_sorting_steps_arr('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_selection_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
+    cell_selection_steps = get_sorting_steps_arr(f'{DATA_DIR}/selection_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy')
+    original_selection_steps = get_sorting_steps_arr(f'{DATA_DIR}/original_selection_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy')
     
     ztest_bubble = ztest(cell_bubble_steps, original_bubble_steps)
     ztest_insertion =  ztest(cell_insertion_steps, original_insertion_steps)
@@ -166,7 +168,7 @@ def cell_original_efficiency_compare():
     plt.title(f'Cell and Traditional Efficiency Comparison')
     
     plt.legend()
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+    # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
     # plt.show()
     
 
@@ -176,7 +178,7 @@ def plot_data_with_zoom_in():
     plt.xlabel('swap steps',  fontsize = 13)
     plt.ylabel('sortedness',  fontsize = 15)
     plt.title("Cell Sorting Sortedness Change", fontsize = 15)
-    moves = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy', allow_pickle=True)[0]
+    moves = np.load(f'{DATA_DIR}/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy', allow_pickle=True)[0]
     monotonicities = [get_current_monotonicity(arr) for  arr in moves]
     x = [n for n in range(1, len(monotonicities) +1)]
     ax.plot(x, monotonicities)
@@ -205,12 +207,12 @@ def plot_raw_data(file, color=None, l=None, algo="", frozen_cell=0):
         x = [n for n in range(1, len(monotonicities) +1)]
         plt.plot(x, monotonicities, c=random_pick_color() if color is None else color, label=l)
         #break
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/{algo}_{frozen_cell}_monotonicity_error_change.png")
+    # plt.savefig(f"{FIGURE_DIR}/{algo}_{frozen_cell}_monotonicity_error_change.png")
     # plt.show()
     
 
 def find_sortness_decreasing():
-    cell_file = f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy'
+    cell_file = f'{DATA_DIR}/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy'
     loaded_data = np.load(cell_file, allow_pickle=True,)
     random_exp = loaded_data[random.randint(0, len(loaded_data))]
     for i in range(1, len(random_exp)):
@@ -232,8 +234,8 @@ def plot_tranditional_cell_together(frozen_cell, cell_type):
     fig.supylabel(algo_name, weight = 'bold', fontsize = 14)
     # for i in range(3):
     #     cell_type = cell_types[i]
-    traditional_file = f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_{cell_type}_with_{frozen_cell}frozen_cannot_move_sorting_steps_100exps.npy'
-    cell_file = f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{cell_type}_sorting_with_{frozen_cell}frozen_cannot_move_steps_100exps.npy'
+    traditional_file = f'{DATA_DIR}/original_{cell_type}_with_{frozen_cell}frozen_cannot_move_sorting_steps_100exps.npy'
+    cell_file = f'{DATA_DIR}/{cell_type}_sorting_with_{frozen_cell}frozen_cannot_move_steps_100exps.npy'
     plt.subplot(1, 2, 1)
     plot_raw_data_for_original_algo(traditional_file, algo=cell_type)
     plt.title("Traditional", weight = 'bold', fontsize = 12)
@@ -258,15 +260,15 @@ def plot_raw_data_for_original_algo(file, color=None, l=None, algo="", frozen_ce
 # for algorithm in ['bubble_sort', 'insertion_sort', 'selection_sort']:
 #     for frozen_cell_number in [0, 1, 2, 3]:
 #         plt.subplot(2, 2, frozen_cell_number + 1)
-#         plot_raw_data(f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algorithm}_sorting_with_{frozen_cell_number}frozen_steps_100exps.npy', algo=algorithm, frozen_cell=frozen_cell_number)
-#     plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/{algorithm}_monotonicity_error_change_all.png")
+#         plot_raw_data(f'{DATA_DIR}/{algorithm}_sorting_with_{frozen_cell_number}frozen_steps_100exps.npy', algo=algorithm, frozen_cell=frozen_cell_number)
+#     plt.savefig(f"{FIGURE_DIR}/{algorithm}_monotonicity_error_change_all.png")
 #     plt.show()
 
 # for algorithm in ['original_bubble_sort', 'original_insertion_sort', 'original_selection_sort']:
 #     for frozen_cell_number in [0, 1, 2, 3]:
 #         plt.subplot(2, 2, frozen_cell_number + 1)
-#         plot_raw_data_for_original_algo(f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algorithm}_with_{frozen_cell_number}frozen_cannot_move_sorting_steps_100exps.npy', algo=algorithm, frozen_cell=frozen_cell_number)
-#     plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/{algorithm}_monotonicity_error_change_all.png")
+#         plot_raw_data_for_original_algo(f'{DATA_DIR}/{algorithm}_with_{frozen_cell_number}frozen_cannot_move_sorting_steps_100exps.npy', algo=algorithm, frozen_cell=frozen_cell_number)
+#     plt.savefig(f"{FIGURE_DIR}/{algorithm}_monotonicity_error_change_all.png")
 #     plt.show()
 # def plot_together_reading_swapping():
 #     plt.subplot(2, 1, 1)
@@ -291,7 +293,7 @@ cell_efficiency_mix_compare()
 
 # find_sortness_decreasing()
 
-# plot_raw_data(f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_5frozen_steps_100exps.npy')
+# plot_raw_data(f'{DATA_DIR}/bubble_sort_sorting_with_5frozen_steps_100exps.npy')
 # for frozen_cell_number in [0, 1, 2, 3]:
 #     for algorithm in ['bubble_sort', 'insertion_sort', 'selection_sort']:
 #         c = 'r'
@@ -301,15 +303,15 @@ cell_efficiency_mix_compare()
 #             c = 'g'
 #         if algorithm == 'selection_sort':
 #             c = 'b'
-#         plot_raw_data(f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algorithm}_sorting_with_{frozen_cell_number}frozen_cannot_move_steps_100exps.npy', color=c, l=algorithm)
+#         plot_raw_data(f'{DATA_DIR}/{algorithm}_sorting_with_{frozen_cell_number}frozen_cannot_move_steps_100exps.npy', color=c, l=algorithm)
 #     plt.legend(loc='best')
 #     plt.show()
 
 
-# plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_sorting_with_2frozen_steps_100exps.npy', color='g')
-# plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_sorting_with_3frozen_steps_100exps.npy', color='b')
+# plot_raw_data('{DATA_DIR}/selection_sort_sorting_with_2frozen_steps_100exps.npy', color='g')
+# plot_raw_data('{DATA_DIR}/selection_sort_sorting_with_3frozen_steps_100exps.npy', color='b')
 
-# plot_raw_data_for_original_algo('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_bubble_sort_with_forzen_sorting_steps_100exps.npy')
+# plot_raw_data_for_original_algo('{DATA_DIR}/original_bubble_sort_with_forzen_sorting_steps_100exps.npy')
 
 # def check_wandering_range(arr):
 #     current_min = arr[0]
@@ -357,16 +359,16 @@ cell_efficiency_mix_compare()
 
 
 
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p0_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p25_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p50_steps_for_50_exp.npy')
-# # plot_raw_data('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p75_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p0_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p25_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p50_steps_for_50_exp.npy')
+# # plot_raw_data('{DATA_DIR}/bubble_sort_p75_steps_for_50_exp.npy')
 
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p0_steps_for_50_exp.npy', 0)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p25_steps_for_50_exp.npy', 25)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p50_steps_for_50_exp.npy', 50)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_p75_steps_for_50_exp.npy', 75)
-# ability_to_break_local_minimum('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_steps_for_50_exps.txt.npy', 100)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p0_steps_for_50_exp.npy', 0)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p25_steps_for_50_exp.npy', 25)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p50_steps_for_50_exp.npy', 50)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_p75_steps_for_50_exp.npy', 75)
+# ability_to_break_local_minimum('{DATA_DIR}/bubble_sort_steps_for_50_exps.txt.npy', 100)
 
 
 

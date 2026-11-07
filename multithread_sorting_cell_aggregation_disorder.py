@@ -162,13 +162,7 @@ def prepare_sorting_list():
     return [i for i in range(100)]
 
 
-def no_cells_should_move(cells):
-    for c in cells:
-        if c.status == CellStatus.SLEEP:
-            return False
-        if c.status == CellStatus.ACTIVE and c.should_move():
-            return False 
-    return True
+from modules.multithread.experiment_utils import no_cells_should_move
 
 def main(argv):
     sorting_list = prepare_sorting_list()

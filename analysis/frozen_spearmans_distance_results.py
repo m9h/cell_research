@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR, FIGURE_DIR
 import numpy as np
 from utils import get_monotonicity
 import scipy.stats as stats
@@ -38,12 +39,12 @@ def get_original_exp_monotonicities(file):
     return [exp_record for exp_record in experiments]
 
 def get_original_algo_sorting_file_path(algo, frozen_cells):
-    #return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_{algo}_sort_sorting_with_{frozen_cells}frozen_frozen_swap_count_100exps.npy"
-    return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_{algo}_sort_with_{frozen_cells}frozen_cannot_move_sorting_records_100exps.npy"
+    #return f"{DATA_DIR}/original_{algo}_sort_sorting_with_{frozen_cells}frozen_frozen_swap_count_100exps.npy"
+    return f"{DATA_DIR}/original_{algo}_sort_with_{frozen_cells}frozen_cannot_move_sorting_records_100exps.npy"
 
 def get_cell_algo_sorting_file_path(algo, frozen_cells):
-    return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algo}_sort_sorting_with_{frozen_cells}frozen_steps_100exps.npy"
-    #return f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algo}_sort_sorting_with_{frozen_cells}frozen_cannot_move_steps_100exps.npy"
+    return f"{DATA_DIR}/{algo}_sort_sorting_with_{frozen_cells}frozen_steps_100exps.npy"
+    #return f"{DATA_DIR}/{algo}_sort_sorting_with_{frozen_cells}frozen_cannot_move_steps_100exps.npy"
 
 def get_success_rate_for_original_exp(file):
     exps = np.load(file, allow_pickle=True)
@@ -104,7 +105,7 @@ def get_success_rate_for_cell_exp(file):
 #     plt.title(f'Frozen Cell Impact to Cell View Sorting Algorithms')
     
 #     plt.legend()
-#     # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+#     # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
 
 
 def plot_bar_chart_for_frozen_affect(fozen_cell_number):
@@ -149,7 +150,7 @@ def plot_bar_chart_for_frozen_affect(fozen_cell_number):
     # plt.title(f'Frozen Cell Impact to Traditional and Cell View Sorting Algorithms')
     
     plt.legend()
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+    # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
 
 
 def compare_algorithms(algo, frozen_cells):

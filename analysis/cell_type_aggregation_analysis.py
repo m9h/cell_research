@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR, FIGURE_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -9,7 +10,7 @@ import scipy.stats as stats
 import pandas as pd
 import random
 
-# moves = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_with_group_id_evenly_dist.npy')
+# moves = np.load('{DATA_DIR}/cell_type_with_group_id_evenly_dist.npy')
 def get_value_cell_type_map(arr):
     value_map = {}
     for [_, cell_type, value] in arr:
@@ -209,10 +210,10 @@ def plot_moves_file(dir, title):
     plt.ylabel('aggregation value')
     plt.title(title)
     for i in range(1):
-        moves = np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy")
+        moves = np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy")
         plot_aggregation_value(moves)
     file_name = title.replace(" ", "_").lower()
-    plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/{file_name}.png")
+    plt.savefig(f"{FIGURE_DIR}/{file_name}.png")
     plt.show()
 
 
@@ -263,7 +264,7 @@ def get_average_monotonicy_array(exps, factor=1):
 
 
 def plot_final_sorting_results(dir, title):
-    exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
+    exps = [np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
     last_step = [s[2] for s in exps[random.randint(0, len(exps))][-1]]
     cell_types = [s[1] for s in exps[random.randint(0, len(exps))][-1]]
     x = [n for n in range(len(last_step))]
@@ -300,7 +301,7 @@ def get_cells_for_cell_type(cell_type, step):
     return pos, value
 
 def plot_max_aggregation_digits(dir, title, subgraph_pos):
-    exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
+    exps = [np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
     exp = exps[random.randint(0, len(exps))]
     max_index = get_max_aggregation_step(exp)
     step = [s[2] for s in exp[max_index]]
@@ -340,7 +341,7 @@ def cell_type_str_to_number(cell_type_name):
 def plot_cell_monotonicity_change_by_other_cell_move(dir, cell_1_name, cell_2_name, plot_shape, row):
     cell_1 = cell_type_str_to_number(cell_1_name)
     cell_2 = cell_type_str_to_number(cell_2_name)
-    exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
+    exps = [np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
     m_arr_1 = get_monotonicity_array_for_other_cell_move(exps, cell_1, cell_2)
     m_arr_2 = get_monotonicity_array_for_other_cell_move(exps, cell_2, cell_1)
     
@@ -364,7 +365,7 @@ def plot_cell_monotonicity_change_by_other_cell_move(dir, cell_1_name, cell_2_na
         plt.show()
     
 def plot_dis_order(dir, title, up_cell, down_cell, plot_shape):
-    exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
+    exps = [np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(100)]
     aggregation_value_list, aggregation_std_up, aggregation_std_down = get_average_aggregation_array(exps, factor=1.25)
     monotonicity_value_list, monotonicity_std_up, monotonicity_std_down = get_average_monotonicy_array(exps, factor=1.25)
     x = [n for n in range(len(aggregation_value_list))]
@@ -379,7 +380,7 @@ def plot_dis_order(dir, title, up_cell, down_cell, plot_shape):
     ax1.set_ylim(ymin=0.3, ymax=1)
     ax1.legend(loc="upper left")
     
-    # bubble_bubble_exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests_bubble_bubble_bubble/exp_{i}.npy") for i in range(100)]
+    # bubble_bubble_exps = [np.load(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests_bubble_bubble_bubble/exp_{i}.npy") for i in range(100)]
     # bubble_aggregation_value_list, _, _ = get_average_aggregation_array(bubble_bubble_exps)
     # ax1.plot(x, bubble_aggregation_value_list, color='pink', label="same type cells aggregation value change")
     # ax1.legend(loc="lower left")
@@ -401,7 +402,7 @@ def plot_dis_order(dir, title, up_cell, down_cell, plot_shape):
     print(f"final monotonicity for {dir}: {monotonicity_value_list[-1]}, {monotonicity_std_up[-1] - monotonicity_value_list[-1]}")
 
 def plot_average_data_from_experiment(dir, title, plot_shape, subplot_idx=-1, three_type=False, should_split=False):
-    exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(20)]
+    exps = [np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy", allow_pickle=True) for i in range(20)]
     aggregation_value_list, aggregation_std_up, aggregation_std_down = get_average_aggregation_array(exps)
     monotonicity_value_list, monotonicity_std_up, monotonicity_std_down = get_average_monotonicy_array(exps)
     x = [n for n in range(len(aggregation_value_list))]
@@ -420,7 +421,7 @@ def plot_average_data_from_experiment(dir, title, plot_shape, subplot_idx=-1, th
     ax1.legend(loc="upper left")
     
     suffix = "" if not three_type else "_bubble"
-    bubble_bubble_exps = [np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests_bubble_bubble{suffix}/exp_{i}.npy") for i in range(100)]
+    bubble_bubble_exps = [np.load(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests_bubble_bubble{suffix}/exp_{i}.npy") for i in range(100)]
     bubble_aggregation_value_list, _, _ = get_average_aggregation_array(bubble_bubble_exps)
     ax1.plot(x, bubble_aggregation_value_list, color='pink', label="same type cells aggregation value change")
     ax1.legend(loc="lower left")
@@ -466,7 +467,7 @@ def plot_average_data_from_experiment(dir, title, plot_shape, subplot_idx=-1, th
         
     ax2.legend(loc="upper right")
     
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/{file_name}_combined.png")
+    # plt.savefig(f"{FIGURE_DIR}/{file_name}_combined.png")
     # plt.show()
 
     # plt.figure()
@@ -496,7 +497,7 @@ def get_experiment_data_set_v2(dir):
     first = []
     last = []
     for i in range(100):
-        moves = np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy")
+        moves = np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy")
         first.append(get_aggregation_value_avg(moves[0]))
         last.append(get_max_aggregation_value(moves))
     return first, last
@@ -506,7 +507,7 @@ def get_experiment_data_set():
     first = []
     last = []
     for i in range(100):
-        moves = np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests/exp_{i}.npy")
+        moves = np.load(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests/exp_{i}.npy")
         first.append(get_first_step_aggregation_value(moves))
         last.append(get_final_step_aggregation_value(moves))
     return first, last
@@ -548,7 +549,7 @@ def get_x_pct_aggregation_map_at_exp(file_path, x):
 def get_x_pct_avg_aggregation_map_over_all_exps(x):
     avg_aggregation_map = {}
     for i in range(100):
-        max_aggregation_score_map = get_x_pct_aggregation_map_at_exp(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_aggregation_random_dist_100_tests/exp_{i}.npy", x)
+        max_aggregation_score_map = get_x_pct_aggregation_map_at_exp(f"{DATA_DIR}/cell_type_aggregation_random_dist_100_tests/exp_{i}.npy", x)
         for key in max_aggregation_score_map:
             if key not in avg_aggregation_map:
                 avg_aggregation_map[key] = []
@@ -557,7 +558,7 @@ def get_x_pct_avg_aggregation_map_over_all_exps(x):
 
 
 def get_average_steps(dir):
-    sorting_steps =  [len(np.load(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{dir}/exp_{i}.npy")) for i in range(100)]
+    sorting_steps =  [len(np.load(f"{DATA_DIR}/{dir}/exp_{i}.npy")) for i in range(100)]
     return np.average(sorting_steps)
 
 

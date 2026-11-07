@@ -1,5 +1,6 @@
 import threading
 import time
+import random
 from .StatusProbe import StatusProbe
 from enum import Enum
 
@@ -27,8 +28,8 @@ class MultiThreadCell(threading.Thread):
         status_probe,
         cell_vision=1,
         disable_visualization=False,
-        swapping_count=[0],
-        export_steps=[],
+        swapping_count=None,
+        export_steps=None,
         reverse_direction=False
     ):
         threading.Thread.__init__(self)
@@ -47,8 +48,8 @@ class MultiThreadCell(threading.Thread):
         self.read_error= False
         self.ideal_position = None
         self.visualization_disabled = disable_visualization
-        self.swapping_count = swapping_count
-        self.export_steps = export_steps
+        self.swapping_count = [0] if swapping_count is None else swapping_count
+        self.export_steps = [] if export_steps is None else export_steps
         self.status_probe = status_probe
         self.cell_type_dict = {
             'Bubble': 0,
@@ -57,6 +58,8 @@ class MultiThreadCell(threading.Thread):
         }
         self.reverse_direction=reverse_direction
         self.with_lock = False
+        self.rng = random
+        self.frozen_mode = "passive"
         
     def take_snapshot(self):
         return [c.value for c in self.cells], [[c.group.group_id, self.cell_type_dict[c.cell_type] if c.label == 0 else c.label, c.value, 1 if c.status == CellStatus.FREEZE else 0] for c in self.cells]
@@ -68,10 +71,18 @@ class MultiThreadCell(threading.Thread):
         self.status = CellStatus.FREEZE
         self.previous_status = CellStatus.FREEZE
 
+    def can_swap_with(self, other):
+        return self.status == CellStatus.ACTIVE and (
+            other.status == CellStatus.ACTIVE
+            or (other.status == CellStatus.FREEZE and self.frozen_mode == "passive")
+        )
+
     def swap(self, target_position, skip_stats=False):
         current_cell_at_target = self.cells[int(target_position[0])]
-        if self.status == CellStatus.FREEZE:
-            # or current_cell_at_target.status == CellStatus.FREEZE
+        if self.status == CellStatus.FREEZE or (
+            current_cell_at_target.status == CellStatus.FREEZE
+            and self.frozen_mode == "immovable"
+        ):
             if not self.tried_to_swap_with_frozen:
                 self.status_probe.count_frozen_cell_attempt()
                 self.tried_to_swap_with_frozen = True

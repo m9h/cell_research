@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -60,13 +61,13 @@ def point_cloud_size_change(file):
 
 
 
-cloud_diameters = point_cloud_size_change('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_20_points_sorting_steps.npy')
-bubble_monotonicity_change = get_monotonicity_change('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_20_points_sorting_steps.npy')
+cloud_diameters = point_cloud_size_change(f'{DATA_DIR}/bubble_sort_20_points_sorting_steps.npy')
+bubble_monotonicity_change = get_monotonicity_change(f'{DATA_DIR}/bubble_sort_20_points_sorting_steps.npy')
 
 print(np.corrcoef(cloud_diameters, bubble_monotonicity_change)[0, 1])
 
-selection_cells_cloud_diameters = point_cloud_size_change('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_20_points_sorting_steps.npy')
-selection_monotonicity_change = get_monotonicity_change('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_20_points_sorting_steps.npy')
+selection_cells_cloud_diameters = point_cloud_size_change(f'{DATA_DIR}/selection_sort_20_points_sorting_steps.npy')
+selection_monotonicity_change = get_monotonicity_change(f'{DATA_DIR}/selection_sort_20_points_sorting_steps.npy')
 
 print(np.corrcoef(selection_cells_cloud_diameters, selection_monotonicity_change)[0, 1])
 

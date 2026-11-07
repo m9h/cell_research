@@ -1,3 +1,4 @@
+from modules.multithread.experiment_utils import freeze_cells
 import sys, getopt
 from tkinter import * 
 import threading
@@ -46,8 +47,7 @@ def create_cells_within_one_group(value_list, threadLock, status_probe, cell_typ
     cell_group = CellGroup(cells, cells, 0, left_boundary, right_boundary, GroupStatus.ACTIVE, threadLock, start_count_down, period)
     for cell in cells:
         cell.group = cell_group 
-    for i in range(frozen_cell_number):
-        cells[random.randint(0, len(cells) - 1 )].set_cell_to_freeze()
+    freeze_cells(cells, frozen_cell_number)
     
     # if cell_type == 'insertion':
     #     for i in range(len(cells)):
@@ -108,14 +108,7 @@ def get_pass_in_args(argv):
     return cell_type
 
 
-def no_cells_should_move(cells):
-    for c in cells:
-        if c.status == CellStatus.SLEEP:
-            return False
-        if c.status == CellStatus.ACTIVE and c.should_move():
-            return False 
-    
-    return True
+from modules.multithread.experiment_utils import no_cells_should_move
 
 
 def main(argv):

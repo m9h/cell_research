@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 #import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
@@ -32,7 +33,7 @@ def main(argv):
     plt.title("Bubble Sort Multi Dimentions Visualization")
     plt.xlabel('sorting steps')
     plt.ylabel('dimention')
-    z = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_steps_for_1_exp.npy')
+    z = np.load(f'{DATA_DIR}/bubble_sort_steps_for_1_exp.npy')
     moves = z[0]
     for i in range(int(len(moves)/10) + 1):
         y = 1

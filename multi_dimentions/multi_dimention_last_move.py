@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 #import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
@@ -50,7 +51,7 @@ def get_color(current_step, n):
 #             break 
 #     prev_move = move 
 # z = np.array(points)
-z = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_steps_for_1_exp.npy')
+z = np.load(f'{DATA_DIR}/selection_sort_steps_for_1_exp.npy')
 moves = z[0]
 
 prev_move = moves[0]

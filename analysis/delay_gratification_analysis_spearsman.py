@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR, FIGURE_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import random
@@ -151,11 +152,11 @@ def get_delay_gratification_arr_from_original_algo(file):
     experiments = np.load(file, allow_pickle=True,)
     return  [get_max_delay_gratification(exp_steps) for exp_steps in experiments if len(exp_steps) > 0]
     # return [max_wandering_range(exp_record) for exp_record in experiments]
-# /Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy
-# /Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
+# {DATA_DIR}/bubble_sort_sorting_with_0frozen_cannot_move_steps_100exps.npy
+# {DATA_DIR}/bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
 
 def load_cell_view_data(algorithm, frozen_cell_number):
-    return get_delay_gratification_arr(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algorithm}_sorting_with_{frozen_cell_number}frozen_cannot_move_steps_100exps.npy")
+    return get_delay_gratification_arr(f"{DATA_DIR}/{algorithm}_sorting_with_{frozen_cell_number}frozen_cannot_move_steps_100exps.npy")
 
 def fetch_cell_view_data_to_display(algo, frozen_cell_number):
     data = load_cell_view_data(algo, frozen_cell_number)
@@ -163,11 +164,11 @@ def fetch_cell_view_data_to_display(algo, frozen_cell_number):
     return f"{algo}", min(data), st.median(data), max(data), np.average(data), np.std(data)
 
 def load_data(algorithm, frozen_cell_number):
-    # /Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
-    # /Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_bubble_sort_with_0forzen_cannot_move_sorting_steps_100exps.npy
-    #/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_insertion_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
-    #/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/original_insertion_sort_with_0forzen_cannot_move_sorting_steps_100exps.npy
-    return get_delay_gratification_arr_from_original_algo(f'/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/{algorithm}_with_{frozen_cell_number}frozen_cannot_move_sorting_records_100exps.npy')
+    # {DATA_DIR}/original_bubble_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
+    # {DATA_DIR}/original_bubble_sort_with_0forzen_cannot_move_sorting_steps_100exps.npy
+    #{DATA_DIR}/original_insertion_sort_with_0frozen_cannot_move_sorting_steps_100exps.npy
+    #{DATA_DIR}/original_insertion_sort_with_0forzen_cannot_move_sorting_steps_100exps.npy
+    return get_delay_gratification_arr_from_original_algo(f'{DATA_DIR}/{algorithm}_with_{frozen_cell_number}frozen_cannot_move_sorting_records_100exps.npy')
 
 def fetch_data_to_display(algo, frozen_cell_number):
     data = load_data(algo, frozen_cell_number)
@@ -226,7 +227,7 @@ def plot_bar_chart_for_diff_frozen_cells(index, traditional_df, cell_df):
     
     plt.ylim(ymin=0,)
     plt.legend()
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+    # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
 
 
 def plot_bar_chart_for_frozen_affect(index, traditional_df, cell_df):
@@ -272,7 +273,7 @@ def plot_bar_chart_for_frozen_affect(index, traditional_df, cell_df):
     
     plt.ylim(ymin=0,)
     plt.legend()
-    # plt.savefig(f"/Users/tainingzhang/Desktop/research_images/claim_images/cell_traditional_efficiency_comparison.png")
+    # plt.savefig(f"{FIGURE_DIR}/cell_traditional_efficiency_comparison.png")
 
 
 data = pd.DataFrame(

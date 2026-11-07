@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -6,7 +7,7 @@ from scipy import stats
 import seaborn as sns
 from scipy.optimize import curve_fit
 
-# moves = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_with_group_id_evenly_dist.npy')
+# moves = np.load('{DATA_DIR}/cell_type_with_group_id_evenly_dist.npy')
 def get_cell_type_in_each_group(arr):
     group_map = {}
     for [key, value] in arr:
@@ -103,7 +104,7 @@ def get_max_homogenity_at_exp(file_path):
 
 
 def get_all_exps_max_homogenity():
-    return [get_max_homogenity_at_exp(f"/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/cell_type_with_group_id_random_dist_1000_tests/exp_{i}.npy") for i in range(1000)]
+    return [get_max_homogenity_at_exp(f"{DATA_DIR}/cell_type_with_group_id_random_dist_1000_tests/exp_{i}.npy") for i in range(1000)]
 
 
 def calculate_t_value(arr):

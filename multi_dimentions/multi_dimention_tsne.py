@@ -1,3 +1,4 @@
+from cell_research.paths import DATA_DIR
 from sklearn.manifold import TSNE
 from keras.datasets import mnist
 from sklearn.datasets import load_iris
@@ -39,7 +40,7 @@ for i in range(20):
 
 
 #x = np.array(moves)
-x = np.load('/Users/tainingzhang/Workspace/research/sorting_with_noise/cell_sorting/csv/selection_sort_steps_for_1_exp.npy')[0]
+x = np.load(f'{DATA_DIR}/selection_sort_steps_for_1_exp.npy')[0]
 
 tsne = TSNE(n_components=2, perplexity=20, verbose=1, random_state=123)
 points = tsne.fit_transform(x)
