@@ -71,6 +71,174 @@ recordings, labels, curves, and CSV summaries accompany the figures. Defaults ar
 small enough for a laptop; these are educational studies rather than powered
 replication studies.
 
+## The mathematical model
+
+The array is a small dynamical system. Each cell has a fixed value, a stable
+identity, and a sorting policy (its **algotype**). Values and policies travel with
+the cell when it moves. The changing arrangement is the observable state:
+
+$$
+x(t) = (v_{\pi_t(1)}, v_{\pi_t(2)}, \ldots, v_{\pi_t(n)}),
+$$
+
+where $v_i$ is identity $i$'s value and $\pi_t$ lists the identities in their current
+order. Here $t$ counts discrete activations, not physical time. Every successful
+move exchanges two identities, so the multiset of values is conserved. With
+distinct identities there are $n!$ possible arrangements; equal values can make
+different identity arrangements look identical.
+
+The full state also contains internal variables, especially selection cells'
+search pointers. Let $z_t$ denote that complete state, $a_t$ the identity selected
+by the scheduler, and $\xi_t$ the policy's random choice. One activation is
+
+$$
+z_{t+1} = T_{a_t}(z_t;\xi_t).
+$$
+
+An activation can produce a swap, advance a pointer, or do nothing. This is an
+asynchronous discrete system: it does not integrate differential equations, fit
+weights, or minimize a loss supplied to the cells. The metrics below are
+measurements made by the experimenter. With random scheduling, it can be viewed
+as a stochastic process on the complete state; array values alone omit internal
+information needed to predict the next transition. For exact computer replay,
+the random streams and activation order also matter.
+
+For ascending sorting, the policies implement these different transition rules:
+
+| Policy | Information used | Possible action |
+| --- | --- | --- |
+| Bubble | One randomly chosen immediate neighbor | Exchange an inverted adjacent pair |
+| Insertion | Its left neighbor and an order check over the preceding prefix | Exchange with the left neighbor when the prefix check permits it |
+| Selection | Its own search pointer and the cell at that position | Advance the pointer or exchange potentially nonadjacent cells |
+
+“Cell-based” therefore does not imply that every policy has strictly local
+information or motion. Insertion reads a prefix, and selection can exchange
+distant cells. Frozen-cell exceptions also belong to the explicit rules; see
+[the implementation details](docs/methods.md#rule-details).
+
+The target is an ordered arrangement, $x_1\leq x_2\leq\cdots\leq x_n$. The runner
+stops when it reaches that target. This global success check is not a signal
+used by an individual cell to choose its move. For descending experiments,
+reverse the inequalities and use descending target ranks below.
+
+### Three different meanings of progress
+
+Write $\mathbf{1}[P]$ for 1 when statement $P$ is true and 0 otherwise. All formulas
+here describe ascending order and use one-based positions for readability;
+recorded cell IDs remain zero-based.
+
+**Adjacent errors** count only immediate neighbors:
+
+$$
+A(x) = \sum_{i=1}^{n-1}\mathbf{1}[x_i>x_{i+1}],
+\qquad S(x)=100\left(1-\frac{A(x)}{n}\right).
+$$
+
+$S$ is this codebase's historical **sortedness percentage**. Its denominator is
+$n$, even though there are $n-1$ adjacent pairs, so a strictly decreasing array
+has sortedness $100/n$, not zero. It is neither the percentage of cells at their
+final positions nor the percentage of correctly ordered pairs across the array.
+Both $A=0$ and $S=100$ mean the array is sorted.
+
+**Inversions** count *all* out-of-order pairs:
+
+$$
+I(x) = \sum_{1\leq i<j\leq n}\mathbf{1}[x_i>x_j].
+$$
+
+For distinct values, $0\leq I\leq n(n-1)/2$. Equal values do not form inversions.
+For adjacent exchanges, $I$ is also the minimum number of such exchanges needed
+to sort the values. Every successful correcting bubble swap reduces $I$ by
+exactly one: swapping adjacent $a>b$ removes their inversion, while their total
+pairwise contribution with every other cell is unchanged. Thus $I$ is a discrete
+descent function for bubble swaps. This statement concerns successful swaps;
+activations that do nothing leave it unchanged. It is not a claim that every
+policy or damaged mixture always reaches the target.
+
+**Rank displacement** measures total distance from sorted positions:
+
+$$
+D(x) = \sum_{i=1}^{n}|i-r_i|,
+$$
+
+where $r_i$ is the sorted destination rank assigned to the value at position $i$.
+For ties, occurrences are matched in their current order to the available equal
+value slots in sorted order. For example, `[2, 1, 1]` receives destination ranks
+`[3, 1, 2]`, giving $D=2+1+1=4$. This avoids penalizing arbitrary identity order
+among equal values. $D$ is a Spearman-footrule-style distance, not a correlation
+coefficient or a count of swaps.
+
+The first notebook makes the distinction concrete:
+
+| Arrangement | Adjacent errors $A$ | Sortedness $S$ | Inversions $I$ | Displacement $D$ |
+| --- | ---: | ---: | ---: | ---: |
+| `[2, 4, 1, 3]` | 1 | 75% | 3 | 6 |
+| `[2, 1, 4, 3]` | 2 | 50% | 2 | 4 |
+| `[2, 1, 3, 4]` | 1 | 75% | 1 | 2 |
+| `[1, 2, 3, 4]` | 0 | 100% | 0 | 0 |
+
+The first swap exchanges 4 and 1. It improves the global pair ordering while
+creating two neighboring descents in place of one. A dip in $S$ alone therefore
+does not establish planning or a sacrifice of overall progress: the conclusion
+depends on the observable. The plots show the initial state and each successful
+swap; the event log also retains activations without swaps.
+
+### Damage changes which states are reachable
+
+Freezing cells changes the allowed transitions $T$, not the sorted target.
+With `[2, 1]`, freezing identity 0 (value 2) in passive mode still lets the active
+value 1 initiate a correcting swap. In immovable mode neither cell can exchange
+with the frozen identity, making the sorted target unreachable.
+
+More generally, with adjacent-only motion, immovable cells separate the array
+into segments: values cannot cross those positions. If an immovable value or a
+segment's multiset cannot match the corresponding portion of the sorted target,
+global sorting is impossible under those constraints. Nonadjacent selection
+swaps can cross a barrier, so this segment argument does not apply unchanged to
+mixed policies. Even when a target is reachable under some hypothetical sequence
+of exchanges, the implemented policies may not find it. That is why `stuck`,
+`sorted`, and run limits are recorded separately.
+
+The damage notebook estimates success probability with $\hat p=k/m$, where $k$
+of $m$ trials sort successfully. Its 95% Wilson intervals describe uncertainty
+over sampled trials, not uncertainty about whether a particular array is sorted.
+Matched trials use the same starting arrangement and seeds across damage
+conditions. These marginal intervals alone do not test the paired difference.
+
+### Clustering needs a chance baseline
+
+Let $\ell_i$ be the algotype label at position $i$. The examples measure
+**adjacent-pair aggregation**:
+
+$$
+C(\ell)=\frac{1}{n-1}\sum_{i=1}^{n-1}\mathbf{1}[\ell_i=\ell_{i+1}],
+\qquad
+\mathbb E_{\mathrm{shuffle}}[C]
+=\frac{\sum_k n_k(n_k-1)}{n(n-1)},\quad n>1.
+$$
+
+Here $n_k$ is the number of identities carrying label $k$. The expectation follows
+by drawing two identities without replacement: there are $n(n-1)$ ordered pairs
+and $n_k(n_k-1)$ same-label pairs of type $k$. With three labels occurring six
+times each, the chance baseline is $5/17\approx0.294$, not exactly $1/3$.
+For a single cell the implementation defines aggregation and its baseline as 1.
+This pair-based metric differs from the original paper's cell-based aggregation
+measure; its numbers must not be compared directly with the paper's figures.
+
+An increase in $C$ is not by itself evidence that policies prefer their own type.
+The third notebook compares actual policy labels with shuffled labels on the
+**same trajectories**, and with arbitrary labels on bubble-only trajectories.
+Labels travel with identities in every case. It repeats the experiment under
+random and round-robin scheduling because activation order can affect clustering.
+
+The plotted bands are pointwise 95% bootstrap intervals over independent trials.
+Each curve is aligned by the fraction of its observed successful swaps, rather
+than elapsed time. Paired summary contrasts average the curve difference over
+that normalized trajectory and bootstrap those trial-level differences. They
+measure average excess aggregation, not peak clustering or biological causation.
+See [controls and uncertainty](docs/methods.md#controls-and-uncertainty) for the
+precise comparison and its limitations.
+
 ## Damage and mixtures
 
 ```sh
