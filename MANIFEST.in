@@ -1,4 +1,5 @@
 include README.md uv.lock multithread_cell_sorting.py
+include LICENSE LICENSING.md
 recursive-include examples *.ipynb
 recursive-include docs *.md *.png *.gif *.csv
 recursive-include scripts *.py

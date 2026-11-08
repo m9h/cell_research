@@ -330,5 +330,13 @@ mkdir -p "$CELL_SORTING_FIGURE_DIR"
 The default legacy locations are `csv/` and `outputs/legacy-figures/`, relative to
 the working directory. The old Spearman-distance helper assumes values are ranks
 `0..n-1`; the new rank-displacement metric handles arbitrary integer values and ties.
-No upstream license file was present; this fork does not assert a new license over
-the original authors' code.
+
+## License
+
+The original additions in this fork are available under the [MIT license](LICENSE),
+copyright 2026 Morgan Hough. See [LICENSING.md](LICENSING.md) for the covered files
+and the distinction between new contributions and inherited code.
+
+No upstream license file was present at the recorded baseline. The original
+sorting implementation remains subject to its authors' rights; the MIT grant for
+our additions does not make the combined repository entirely MIT licensed.
